@@ -25,7 +25,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'c5287d2c-f404-47db-a606-4ac216197454', url: 'https://hub.docker.com/repositories/amilaerandika') { // url: '' for Docker Hub
+                    withDockerRegistry(credentialsId: 'c5287d2c-f404-47db-a606-4ac216197454', url: '') { // url: '' for Docker Hub
                         sh "docker push ${IMAGE_NAME}:${env.BUILD_NUMBER}"
                     }
                 }
