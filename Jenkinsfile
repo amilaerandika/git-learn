@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout Source Code') {
             steps {
-                git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/amilaerandika/git-learn.git'
+                git branch: 'main', credentialsId: 'amila-git-credentials', url: 'https://github.com/amilaerandika/git-learn.git'
             }
         }
 
