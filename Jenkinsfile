@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout Source Code') {
             steps {
-                git 'https://github.com/amilaerandika/git-learn.git' // Replace with your Git repository URL
+                git branch: 'main', credentialsId: 'your-credential-id', url: 'https://github.com/amilaerandika/git-learn.git'
             }
         }
 
