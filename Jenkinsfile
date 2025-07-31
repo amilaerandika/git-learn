@@ -1,41 +1,43 @@
 pipeline {
-    agent any // Specifies that the pipeline can run on any available agent
+    agent any 
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building the application...'
-                // Example: Execute a build command (e.g., Maven, Gradle, npm)
-                // sh 'mvn clean install'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // Example: Execute test commands
-                // sh 'mvn test'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                // Example: Deploy to a target environment
-                // sh 'scp target/myapp.jar user@server:/opt/myapp'
-            }
-        }
+    environment {
+        // Replace 'dockerhub-credentials-id' with the ID of your Docker Hub credentials stored in Jenkins
+        DOCKERHUB_CREDENTIALS = credentials('c5287d2c-f404-47db-a606-4ac216197454') 
+        IMAGE_NAME = 'amilaerandika/alpine' // Replace with your Docker Hub username and repository name
     }
 
-    post {
-        always {
-            echo 'Pipeline finished.'
+    stages {
+        stage('Checkout Source Code') {
+            steps {
+                git 'https://github.com/amilaerandika/git-learn.git' // Replace with your Git repository URL
+            }
         }
-        success {
-            echo 'Pipeline succeeded!'
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                }
+            }
         }
-        failure {
-            echo 'Pipeline failed!'
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'c5287d2c-f404-47db-a606-4ac216197454', url: 'https://hub.docker.com/repositories/amilaerandika') { // url: '' for Docker Hub
+                        sh "docker push ${IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    }
+                }
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME}:${env.BUILD_NUMBER}" // Remove the built image locally
+                }
+            }
         }
     }
 }
