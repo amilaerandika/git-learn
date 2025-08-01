@@ -44,7 +44,7 @@ pipeline {
                     withDockerRegistry(credentialsId: 'c5287d2c-f404-47db-a606-4ac216197454') {
                         sh '''
                             export PATH=$PATH:/usr/local/bin:/opt/homebrew/bin
-                            docker push ${IMAGE_NAME}:${BUILD_NUMBER}
+                            /usr/local/bin/docker push ${IMAGE_NAME}:${BUILD_NUMBER}
                         '''
                     }
                 }
