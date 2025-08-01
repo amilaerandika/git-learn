@@ -22,6 +22,7 @@ pipeline {
                     echo "PATH=$PATH"
                     which docker || echo "Docker not found"
                     docker --version || echo "Docker CLI not available"
+                    docker context use default || true
                 '''
             }
         }
